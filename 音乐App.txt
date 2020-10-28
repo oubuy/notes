@@ -1,0 +1,110 @@
+1.better-scroll和fast-click插件点击事件冲突：给img图片添加一个class=“needslcik”;
+
+2.左右联动逻辑视频，第五章
+
+3.开发时候，vuex调试工具方法---const debug = process.env.NODE_ENV !== 'production'
+store/index.js
+
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+import * as actions from './actions'
+import * as getters from './getters'
+import state from './state'
+import mutations from './mutations'
+import createLogger from 'vuex/dist/logger'//调试vuex 打印数据
+
+Vue.use(Vuex)
+
+const debug = process.env.NODE_ENV !== 'production'//调试vuex 
+
+export default new Vuex.Store({
+  actions,
+  getters,
+  state,
+  mutations,
+  strict: debug,//调试vuex 
+  plugins: debug ? [createLogger()] : []//调试vuex 
+})
+
+4.图片按10:7的比例缩放样式：
+img{
+      width: 100%
+      height: 0
+      padding-top: 70%
+
+}
+
+5.vuex操作步骤：
+1，state初始化数据，
+2.getter相当于计算属性，是一个函数。外部组件需要用到vuex里面的state值都是通过mapGetter([])获取出来。
+3.mutation是一个操作改变state操作，有两个参数：（state,传入参数），一般都是mutations-type管理mutation,组件调用mutation是可以用mapMutation({组件用到函数名：‘mutation-type里面的相应名’}),里面是对象形式的，调用mutations-types里面统一操作状态。mapMutation({setSimner:'SET_SINGER'})。调用：this.setSimner(传入参数)
+4.action:异步或者改变mutation里面的状态（多个或者一个（一个时候，可以直接操作mutation））,mapAction{[]}.
+
+
+6.axios传递参数是 params格式的，需要改为form-data格式，可以在main.js设置header.
+7.uni-app的异步请求发送传递参数格式是form-data格式的。
+
+
+8.audio音乐播放标签，有音乐加载完成事件@ready=""
+9.css引用变量样式，stylus,===>@import '~styles/varibles.styl'格式是：~@/../
+
+git如何建立分支和使用：
+1.在仓库上创建分支，然后git pull拉下分支代码；
+2.gitcheckout 分支名；
+3.就可以在这分支上开发过程，使用git run dev；
+4.git status
+5.提交分支代码（正常的提交方式：git add . ===>git commit -m'描述'==》git push）
+6.合并分支代码（git checkout master==>git merge origin/分支名===》git push）
+
+第二种方法：===》https://www.cnblogs.com/linjiqin/p/7756164.html
+
+git branches ==>查看分支
+如果有有分支没有合并到master中，又创建了心得分支，则使用git merge 上一个没有合并分支的分支名称，即可搞掂。
+
+
+
+10.图片等比例缩放写法：
+.wrapper{//这种写法是占位宽高的比例，相当于是30vw.(是有具体高度了，而且是等比例的)
+       
+        overflow: hidden
+        height: 0
+        padding-bottom: 30.25%====》是宽/高*100%
+    // 或者直接用高30vw
+    .swiper-img{
+       width: 100%
+}
+}
+
+11.APP开发设计稿都是750px，而我们打开项目时候浏览器是375px，二倍图，所以高和实际的情况差2倍。应该乘以2.
+
+12.static是放静态文件，外部可以通过链接打开。（localhost:8080/static/mock/index.json）
+这个static文件下可以模拟静态数据，.json格式数据存储，可以通过axios请求。let url="/static/mock/index.json"
+
+http://localhost:8080/static/mock/index.json===>记得不能带#
+
+13.盒子模型：box-sizing:border-box;  with:100%; padding:0 0.5rem.  这样设置也不会改变盒子width宽度的大小。
+
+14。v-for遍历数组时候是(item,index) in arr   遍历对象时候：（item,key）in object :key=key  key==>是对象的key值
+
+15.this.$refs.dom或者是this.$refs[dom]这两种都是或者元素的写法。
+
+16.better-scroll插件点击A事件，B滚动到对应的位置用scrollToElement（）方法。
+
+17.updated生命周期，是在数据改变渲染完成了，再去调用的更新updated的生命周期。可以在这个生命周期里面执行某个稳定的值得逻辑。
+
+18.offsetTop==>偏移上一个元素的距离
+
+19.节流方法：1.给标注  2.给定时器  ===》去哪儿App-city模块就有用到定时器做节流的优化性能。
+
+20.跨页面（A页面传值到B页面）传值方法：eventBus,vuex，路由传参数
+也是可以直接出发mutation里面的方法的，1、 ...mapMutation([A函数名：‘vuex中mutation定义的函数名’]) 2、this.$store.commit('mutation里面定义的函数名'，参数)。
+
+21.mapState(可以是数组['A','B']或者是对象{A(自定义名字):"B（是vuex中state定义的名字）"}),mapGetter（）一样写法。这两个都是在computed计算属性中使用的。 mapAction(),mapMutation()这两个是在motheds中使用
+
+22.vuex中的getters这个方法就像computed这个计算方法一样的。如果逻辑上要计算出新的值，或者要过滤那些没用值，就可以从mapGetter()获取值出来使用，如果只是改变原来的值，即可以直接从state中获取出来使用。
+
+23.keep-alive缓存页面的标签，是跟activated生命周期一起使用的。如果keep-alive缓存的页面，只有执行activated生命周期。
+如果在App.vue页面设置了<keep-alive><router-view/></keep-alive>,缓存过的页面，如何根据参数变化，而去改变页面数据渲染呢？首先在：data中定义一个lastData:''.然后在mounted的生命周期中，初始化调用数据接口时候，赋值初始化参数的值给this.lastData=初始化参数的值。最后在activated中判断初始化参数值是否跟lastData的值是否相等，不相等的时候，则重新去调用获取数据的接口并且传递对应的参数值。
+       
+     
